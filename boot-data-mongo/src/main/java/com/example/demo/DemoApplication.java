@@ -39,7 +39,7 @@ class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String[] args) {
-        log.info("start data initialization ...");
+        log.warn("start data initialization ...");
         this.posts
                 .deleteAll()
                 .thenMany(
@@ -53,9 +53,9 @@ class DataInitializer implements CommandLineRunner {
                         this.posts.findAll()
                 )
                 .subscribe(
-                        data -> log.info("found posts: {}", posts),
-                        error -> log.error("" + error),
-                        () -> log.info("done initialization...")
+                        data -> log.warn("found posts: {}", data),
+                        error -> log.warn("" + error),
+                        () -> log.warn("done initialization...")
                 );
 
     }
@@ -72,12 +72,12 @@ class PostController {
         this.posts = posts;
     }
 
-    @GetMapping("")
+    @GetMapping
     public Flux<Post> all() {
         return this.posts.findAll();
     }
 
-    @PostMapping("")
+    @PostMapping
     public Mono<Post> create(@RequestBody Post post) {
         return this.posts.save(post);
     }
